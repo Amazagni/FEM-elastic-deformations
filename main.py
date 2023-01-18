@@ -42,7 +42,7 @@ bArray = [[0for i in range(n)]for i in range(n)]
 for i in range(n):
     for j in range(n):
         if -1 <= i - j <= 1:
-            bArray[i][j] = countB(j,i)
+            bArray[i][j] = countB(j,i) #w naszym przypadku kolejność nie ma większego znaczenia, ponieważ B(a,b) == B(b,a)
 
 lArray = [0 for i in range(n)]
 for i in range(n):
