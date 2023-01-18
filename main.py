@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 import scipy
 
 n = int(input())
-length = 2
-h = length/n
+length = 2 #długość naszej dziedziny
+u = 3 #wartość u z daszkiem
+h = length/n #odleglość między ei a ei+1
 # i - indeks obliczanego przez nas e, x - wartosc jaka przyjmuje nasze e
+
 def countE(i,x):
     if(x < 0 or x > 2 ): return 0
     start = h * (i - 1)
@@ -16,6 +18,7 @@ def countE(i,x):
     return 0
 
 def derivativeE(i,x):
+    if(x < 0 or x > 2 ): return 0
     start = h * (i - 1)
     middle = h * i
     end = h * (i + 1)
@@ -38,23 +41,25 @@ def countB(i,j):
 bArray = [[0for i in range(n)]for i in range(n)]
 for i in range(n):
     for j in range(n):
-        if(abs(i-j) <=1):
+        if -1 <= i - j <= 1:
             bArray[i][j] = countB(j,i)
 
 lArray = [0 for i in range(n)]
 for i in range(n):
-    lArray[i] = (-20) * countE(i,0) + 2 * 3 * countE(i,0) #pomijamy całkę, ponieważ wiemy, że pochodna u z daszkiem jest rowna 0
+    lArray[i] = (-20) * countE(i,0) + 2 * u * countE(i,0) #pomijamy całkę, ponieważ wiemy, że pochodna u z daszkiem jest rowna 0
 
-uArray = numpy.linalg.inv(bArray).dot(lArray)
+uArray = numpy.linalg.solve(bArray,lArray)
 xArray = [i*h for i in range(n)]
 for i in range(n):
     sumY = 0
-    for j in range(n):
-        sumY += uArray[i] * countE(j,xArray[i])
-    sumY += 3
+    for j in range(3):
+        sumY += uArray[i] * countE(i-1 + j,xArray[i])
+    # for j in range(n):
+    #     sumY += uArray[i] * countE(j,xArray[i])
+    sumY += u
     uArray[i] = sumY
 uArray = numpy.append(uArray,3)
 xArray.append(2)
 plt.plot(xArray,uArray)
 plt.show()
-#print(uArray[0])
+
